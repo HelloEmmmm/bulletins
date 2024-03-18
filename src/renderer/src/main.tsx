@@ -6,6 +6,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/root';
 import Home from './routes/home';
 import Login from './routes/login';
+import { LoadingProvider } from './hooks/useLoading';
 
 const router = createHashRouter([
 	{
@@ -26,6 +27,8 @@ const router = createHashRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<RouterProvider router={router} />
+		<LoadingProvider>
+			<RouterProvider router={router} />
+		</LoadingProvider>
 	</React.StrictMode>
 );

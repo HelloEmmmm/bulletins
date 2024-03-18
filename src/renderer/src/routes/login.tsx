@@ -99,13 +99,6 @@ const Login = (): ReactNode => {
 						</a>
 					</div>
 				</form>
-				<button
-					onClick={() => {
-						window.electron.ipcRenderer.send('message', 'Hello');
-					}}
-				>
-					Test IPC
-				</button>
 				<p className='text-center text-gray-500 text-xs'>
 					&copy;2024 Riches Corp. All rights reserved.
 				</p>

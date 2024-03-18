@@ -7,13 +7,12 @@ if (typeof window !== 'undefined') {
 	token = localStorage.getItem('token') || '';
 }
 
-type CancelTokenMap<K extends keyof any, T> = {
-	[P in K]: T;
-};
-
 const authCode = [401, 403];
+
 const CancelToken = axios.CancelToken;
-export const cancelTokenMap: CancelTokenMap<string, any> = { get: {} };
+
+export const cancelTokenMap: Record<'get', { [key: string]: Record<string, any> }> = { get: {} };
+
 const service = axios.create({
 	baseURL: 'http://39.105.204.185:8787',
 	timeout: 10000,
@@ -72,12 +71,7 @@ service.interceptors.response.use(
 	}
 );
 
-const get = (
-	url: string,
-	params?: { [key: string]: any },
-	_cancelToken = false,
-	header = {}
-): Promise<any> => {
+const get = (url: string, params?: { [key: string]: any }, _cancelToken = false, header = {}) => {
 	const _config: AxiosRequestConfig = {
 		url: url,
 		method: 'get',
@@ -127,7 +121,7 @@ const get = (
 	// });
 };
 
-const post = (url: string, data = {}): Promise<AxiosResponse<never, never>> => {
+const post = (url: string, data = {}) => {
 	const _config: AxiosRequestConfig = {
 		url: url,
 		method: 'post',
@@ -148,7 +142,7 @@ const put = (url: string, data = {}, header = {}): Promise<AxiosResponse> => {
 	return service(_config);
 };
 
-const _delete = (url: string, data = {}, header = {}): Promise<AxiosResponse> => {
+const _delete = (url: string, data = {}, header = {}) => {
 	const _config = {
 		url: url,
 		method: 'delete',
