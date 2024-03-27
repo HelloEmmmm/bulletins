@@ -1,6 +1,9 @@
 import { ReactNode, useCallback, useState } from 'react';
 import { LoginInput } from '../components/LoginInput';
-import { CreateUser } from '../service/api/login';
+import { CreateUser, LoginApi } from '../service/api/login';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type PageType = 'login' | 'register';
 
@@ -10,6 +13,7 @@ const Login = (): ReactNode => {
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [invitationCode, setInvitationCode] = useState<string>('');
+	const nav = useNavigate();
 
 	const memorizedHandlePhoneChange = useCallback(
 		(event: { target: { value: string | ((prevState: string) => string) } }) => {
@@ -55,7 +59,9 @@ const Login = (): ReactNode => {
 						value={password}
 						onChange={memorizedHandlePasswordChange}
 					/>
-					<LoginInput label={'手机号'} value={phone} onChange={memorizedHandlePhoneChange} />
+					{pageType === 'register' && (
+						<LoginInput label={'手机号'} value={phone} onChange={memorizedHandlePhoneChange} />
+					)}
 					{pageType === 'register' && (
 						<LoginInput
 							value={invitationCode}
@@ -67,19 +73,32 @@ const Login = (): ReactNode => {
 						<button
 							onClick={() => {
 								const base = {
-									// invitation_code:
 									username,
 									password,
-									phone_number: phone,
 								};
 								if (pageType === 'login') {
-									if (phone && username && password) {
-										// CreateUser(base)
+									if (username && password) {
+										LoginApi(base).then((res) => {
+											if (res.code === 200) {
+												localStorage.setItem('token', res.token);
+												nav('/home');
+											} else {
+												toast.error(res.msg);
+											}
+										});
 									}
 								} else {
 									if (phone && username && password && invitationCode) {
-										CreateUser({ ...base, invitation_code: invitationCode }).then((res) => {
-											console.log(res);
+										CreateUser({
+											...base,
+											phone_number: phone,
+											invitation_code: invitationCode,
+										}).then((res) => {
+											if (res.code === 200) {
+												toast.success(res.msg);
+											} else {
+												toast.error(res.msg);
+											}
 										});
 									}
 								}
@@ -87,22 +106,25 @@ const Login = (): ReactNode => {
 							className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
 							type='button'
 						>
-							登录
+							{pageType === 'login' ? '登录' : '注册'}
 						</button>
-						<a
-							onClick={() => {
-								setPageType(pageType === 'login' ? 'register' : 'login');
-							}}
-							className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
-						>
-							还没有账号？
-						</a>
+						{pageType === 'login' && (
+							<a
+								onClick={() => {
+									setPageType(pageType === 'login' ? 'register' : 'login');
+								}}
+								className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
+							>
+								还没有账号？
+							</a>
+						)}
 					</div>
 				</form>
 				<p className='text-center text-gray-500 text-xs'>
 					&copy;2024 Riches Corp. All rights reserved.
 				</p>
 			</div>
+			<ToastContainer />
 		</div>
 	);
 };

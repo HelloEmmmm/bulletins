@@ -1,10 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-let token = '';
-
-if (typeof window !== 'undefined') {
-	// Perform localStorage action
-	token = localStorage.getItem('token') || '';
+declare module 'axios' {
+	interface AxiosInstance {
+		(config: AxiosRequestConfig): Promise<any>;
+	}
 }
 
 const authCode = [401, 403];
@@ -17,13 +16,17 @@ const service = axios.create({
 	baseURL: 'http://39.105.204.185:8787',
 	timeout: 10000,
 	headers: {
-		Authorization: token ? `Bearer ${token}` : '',
+		Authorization: localStorage.getItem('token')
+			? `Bearer ${localStorage.getItem('token')}`
+			: undefined,
 	},
 });
 
 service.interceptors.request.use(
 	(config) => {
-		// todo
+		config.headers.Authorization = localStorage.getItem('token')
+			? `Bearer ${localStorage.getItem('token')}`
+			: undefined;
 		return config;
 	},
 	(error) => {
@@ -34,8 +37,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	(response) => {
 		const data = response.data;
-		const code = data.errcode | 0;
+		const code = data.code;
 		if (authCode.includes(code)) {
+			window.location.href = '#/login';
 			//todo
 		} else {
 			//todo
@@ -109,16 +113,6 @@ const get = (url: string, params?: { [key: string]: any }, _cancelToken = false,
 		}
 	}
 	return service(_config);
-	// 低版本浏览器不支持promise的finally，加垫片(promise.prototype.finally)or放弃。
-	// .finally(() => {
-	//   if (_cancelToken) {
-	//     const _item = cancelTokenMap['get'][url]
-	//     if (_item && _item.count <= 1) {
-	//       delete cancelTokenMap['get'][url]
-	//     }
-	//     _item && _item.count--
-	//   }
-	// });
 };
 
 const post = (url: string, data = {}) => {
@@ -175,16 +169,4 @@ const cancelAxiosToken = (url: string, params = {}, type: string | number): void
 	}
 };
 
-const postFile = (url: string, data = {}) => {
-	const config = {
-		headers: {
-			'Content-Type': 'multipart/form-data',
-			Accept: '*/*',
-		},
-	};
-	return service.post(url, data, config).then((res) => {
-		return res;
-	});
-};
-
-export { get, post, _delete, put, postFile, cancelAxiosToken };
+export { get, post, _delete, put, cancelAxiosToken };
