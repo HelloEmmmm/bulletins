@@ -45,6 +45,7 @@ const Home = (): ReactNode => {
 	return (
 		<div className='flex min-h-screen text-white'>
 			<div className={'w-[40%] border-r-[1px] border-gray-600 p-[16px]'}>
+				<p className={'text-[20px] mb-2'}>今日消息</p>
 				<ul>
 					{today.map((item, index) => {
 						return (
@@ -57,7 +58,7 @@ const Home = (): ReactNode => {
 				</ul>
 			</div>
 			<div className={'flex flex-col flex-1'}>
-				<div className={'p-[20px] border-b-[1px] border-gray-600'}>
+				<div className={'p-[20px] border-b-[1px] border-gray-600 flex flex-row-reverse'}>
 					<button
 						onClick={() => {
 							GetWebSetting().then((res) => {
@@ -74,6 +75,7 @@ const Home = (): ReactNode => {
 					</button>
 				</div>
 				<div className={'flex-1 p-[20px]'}>
+					<p className={'text-[20px] mb-2'}>历史消息</p>
 					<ul>
 						{history.map((item) => {
 							return (
