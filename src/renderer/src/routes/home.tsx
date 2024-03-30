@@ -31,15 +31,16 @@ const Home = (): ReactNode => {
 		const url = 'ws://39.105.204.185:7272';
 
 		const ws = new MyWebSocket(url);
-		ws.init(
-			{
-				//time：心跳时间间隔 timeout：心跳超时间隔 reconnect：断线重连时间，一般的，断线重连时间等于心跳时间间隔加断线重连时间（忽略超时等待）
-				time: 30 * 1000,
-				timeout: 1000,
-				reconnect: 5 * 1000,
-			},
-			true
-		);
+		ws.init();
+		// ws.init(
+		// 	{
+		// 		//time：心跳时间间隔 timeout：心跳超时间隔 reconnect：断线重连时间，一般的，断线重连时间等于心跳时间间隔加断线重连时间（忽略超时等待）
+		// 		time: 30 * 1000,
+		// 		timeout: 1000,
+		// 		reConnect: 5 * 1000,
+		// 	},
+		// 	true
+		// );
 	}, []);
 
 	return (
