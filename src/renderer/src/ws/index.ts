@@ -1,3 +1,5 @@
+import { eventBus } from '../utils/event';
+
 const ModeCode = {
 	//websocket消息类型
 	MSG: 'message', //普通消息
@@ -59,17 +61,19 @@ export default class MyWebSocket extends WebSocket {
 		console.log(data);
 		switch (data.type) {
 			case ModeCode.MSG: //普通消息
-				console.log('收到消息' + data.msg);
+				console.log('收到消息' + data.type);
 				break;
 			/* useless code */
 			case ModeCode.HEART_BEAT: //心跳
 				this.webSocketState = true;
-				console.log('收到心跳响应' + data.msg);
+				console.log('收到心跳响应' + data.type);
 				break;
 			case ModeCode.PING: //心跳
 				this.webSocketState = true;
-				console.log('收到心跳响应' + data.msg);
+				console.log('收到心跳响应' + data.type);
 				break;
+			case 1:
+				eventBus.publish('GET_TODAY_MESSAGE');
 		}
 	};
 

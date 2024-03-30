@@ -1,5 +1,11 @@
 import { get } from '@renderer/service/fetch';
-import { AllMessageResponse, GetWebSettingResponse, MessageResponse } from './interface';
+import {
+	AllMessageResponse,
+	CommonResponse,
+	GetWebSettingResponse,
+	MessageResponse,
+	Notice,
+} from './interface';
 
 export const GetTodayMessage = (): Promise<MessageResponse> => {
 	return get(`/getTodayData`);
@@ -11,4 +17,12 @@ export const GetAllMessage = (): Promise<AllMessageResponse> => {
 
 export const GetWebSetting = (): Promise<GetWebSettingResponse> => {
 	return get(`/getWebSetting`);
+};
+
+export const GetLastNotice = (): Promise<CommonResponse<Notice>> => {
+	return get(`/getDayNotice`);
+};
+
+export const GetAllNotice = (): Promise<CommonResponse<Notice[]>> => {
+	return get(`/getNoticeList`);
 };

@@ -1,6 +1,5 @@
 import './assets/main.css';
 
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/root';
@@ -26,9 +25,7 @@ const router = createHashRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-	<React.StrictMode>
-		<LoadingProvider>
-			<RouterProvider router={router} />
-		</LoadingProvider>
-	</React.StrictMode>
+	<LoadingProvider>
+		<RouterProvider router={router} />
+	</LoadingProvider>
 );
