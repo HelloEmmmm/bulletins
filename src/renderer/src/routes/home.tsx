@@ -117,7 +117,7 @@ const Home = (): ReactNode => {
 					</div>
 				</div>
 				<div className={'flex-1 h-[calc(100vh-89px)] overflow-hidden'}>
-					<div className={'h-[50%] border-gray-600 border-b-[1px] p-[20px]'}>
+					<div className={'h-[30%] border-gray-600 border-b-[1px] p-[20px]'}>
 						<div className={'flex justify-between items-center cursor-pointer'}>
 							<p className={'text-[20px] mb-[10px] font-bold text-green-600'}>最新公告</p>
 							<p onClick={() => setAllNoticeOpen(true)}>更多</p>
@@ -127,7 +127,7 @@ const Home = (): ReactNode => {
 							<p className={'text-right'}>{lastNotice?.created_at}</p>
 						</div>
 					</div>
-					<div className={'h-[50%] p-[20px]'}>
+					<div className={'h-[70%] p-[20px]'}>
 						<p className={'text-[20px] mb-[10px] font-bold text-green-600'}>今日消息</p>
 						<ul className={'overflow-auto h-[calc(100%-40px)]'}>
 							{today.map((item, index) => {
