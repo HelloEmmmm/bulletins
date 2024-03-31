@@ -106,15 +106,17 @@ const Home = (): ReactNode => {
 					>
 						联系作者
 					</button>
-					<div className={'flex gap-4'}>
-						<p>过期时间：{userInfo?.expiration_date}</p>
-						<p
-							className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold`}
-						>
-							{userInfo?.is_trial === 1 ? '试用账号' : '正式账号'}
-						</p>
-						<p>{userInfo?.username}</p>
-					</div>
+					{userInfo && (
+						<div className={'flex gap-4'}>
+							<p>过期时间：{userInfo?.expiration_date}</p>
+							<p
+								className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold`}
+							>
+								{userInfo?.is_trial === 1 ? '试用账号' : '正式账号'}
+							</p>
+							<p>{userInfo?.username}</p>
+						</div>
+					)}
 				</div>
 				<div className={'flex-1 h-[calc(100vh-89px)] overflow-hidden'}>
 					<div className={'h-[30%] border-gray-600 border-b-[1px] p-[20px]'}>
