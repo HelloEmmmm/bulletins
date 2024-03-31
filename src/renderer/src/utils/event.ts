@@ -44,15 +44,14 @@ class EventBus implements IEventBus {
 			callbackObject[id](...args);
 
 			// 只订阅一次的回调函数需要删除
-			if (id[0] === 'd') {
+			if (id[0] === 'once') {
 				delete callbackObject[id];
 			}
 		}
 	}
 
-	commonSubscribe(eventName: string, callback: () => void) {
+	commonSubscribe(id: string | number, eventName: string, callback: () => void) {
 		// 标示为只订阅一次的回调函数
-		const id = 'd' + this._callbackId++;
 		// 存储订阅者的回调函数
 		// callbackId使用后需要自增，供下一个回调函数使用
 		this._eventObject[eventName][id] = callback;
@@ -73,22 +72,25 @@ class EventBus implements IEventBus {
 
 	// 订阅事件
 	subscribe(eventName: string, callback: () => void): ISubscribe {
+		const id = this._callbackId++;
 		// 初始化这个事件
 		if (!this._eventObject[eventName]) {
 			// 使用对象存储，注销回调函数的时候提高删除的效率
 			this._eventObject[eventName] = {};
 		}
-		return this.commonSubscribe(eventName, callback);
+
+		return this.commonSubscribe(id, eventName, callback);
 	}
 
 	// 只订阅一次
 	subscribeOnce(eventName: string, callback: () => void): ISubscribe {
+		const id = 'once' + this._callbackId++;
 		// 初始化这个事件
 		if (!this._eventObject[eventName]) {
 			// 使用对象存储，注销回调函数的时候提高删除的效率
 			this._eventObject[eventName] = {};
 		}
-		return this.commonSubscribe(eventName, callback);
+		return this.commonSubscribe(id, eventName, callback);
 	}
 
 	// 清除事件

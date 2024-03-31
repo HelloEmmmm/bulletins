@@ -68,8 +68,10 @@ const Home = (): ReactNode => {
 
 	useEffect(() => {
 		eventBus.subscribe('GET_TODAY_MESSAGE', memorizedGetTodayMessage);
+		eventBus.subscribe('GET_NEW_NOTICE', memorizedGetLastNotice);
 		return () => {
 			eventBus.clear('GET_TODAY_MESSAGE');
+			eventBus.clear('GET_NEW_NOTICE');
 		};
 	}, [memorizedGetTodayMessage]);
 

@@ -74,6 +74,10 @@ export default class MyWebSocket extends WebSocket {
 				break;
 			case 1:
 				eventBus.publish('GET_TODAY_MESSAGE');
+				break;
+			case 2:
+				eventBus.publish('GET_NEW_NOTICE');
+				break;
 		}
 	};
 
