@@ -1,12 +1,19 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLoading } from '../hooks/useLoading';
-import { GetAllMessage, GetLastNotice, GetTodayMessage, GetWebSetting } from '../service/api/home';
+import {
+	GetAllMessage,
+	GetLastNotice,
+	GetPersonalInfo,
+	GetTodayMessage,
+	GetWebSetting,
+} from '../service/api/home';
 import Modal from '../components/Modal';
 import {
 	AllMessageResponse,
 	ManagerInfo,
 	MessageResponse,
 	Notice,
+	UserInfo,
 } from '../service/api/home/interface';
 import { eventBus } from '../utils/event';
 import AllNoticeModal from '../components/AllNoticeModal';
@@ -19,6 +26,7 @@ const Home = (): ReactNode => {
 	const [history, setHistory] = useState<AllMessageResponse['data']>([]);
 	const [today, setToday] = useState<MessageResponse['data']>([]);
 	const [lastNotice, setLastNotice] = useState<Notice | null>(null);
+	const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
 	useEffect(() => {
 		GetAllMessage().then((res) => {
@@ -31,6 +39,11 @@ const Home = (): ReactNode => {
 			if (res.code === 200) {
 				setToday(res.data);
 				updateShow(false);
+			}
+		});
+		GetPersonalInfo().then((res) => {
+			if (res.code === 200) {
+				setUserInfo(res.data);
 			}
 		});
 		memorizedGetLastNotice();
@@ -76,7 +89,9 @@ const Home = (): ReactNode => {
 				</ul>
 			</div>
 			<div className={'flex flex-col flex-1 h-screen'}>
-				<div className={'p-[20px] border-b-[1px] border-gray-600 flex flex-row-reverse'}>
+				<div
+					className={'p-[20px] border-b-[1px] border-gray-600 flex justify-between items-center'}
+				>
 					<button
 						onClick={() => {
 							GetWebSetting().then((res) => {
@@ -91,6 +106,15 @@ const Home = (): ReactNode => {
 					>
 						联系作者
 					</button>
+					<div className={'flex gap-4'}>
+						<p>过期时间：{userInfo?.expiration_date}</p>
+						<p
+							className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold`}
+						>
+							{userInfo?.is_trial === 1 ? '试用账号' : '正式账号'}
+						</p>
+						<p>{userInfo?.username}</p>
+					</div>
 				</div>
 				<div className={'flex-1 h-[calc(100vh-89px)] overflow-hidden'}>
 					<div className={'h-[50%] border-gray-600 border-b-[1px] p-[20px]'}>
@@ -99,8 +123,8 @@ const Home = (): ReactNode => {
 							<p onClick={() => setAllNoticeOpen(true)}>更多</p>
 						</div>
 						<div className={'overflow-auto h-[calc(100%-40px)]'}>
-							<p>{lastNotice?.message}</p>
-							<p>{lastNotice?.created_at}</p>
+							<p className={'text-[18px]'}>{lastNotice?.message}</p>
+							<p className={'text-right'}>{lastNotice?.created_at}</p>
 						</div>
 					</div>
 					<div className={'h-[50%] p-[20px]'}>

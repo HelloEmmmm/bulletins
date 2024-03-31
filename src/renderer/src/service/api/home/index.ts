@@ -5,6 +5,7 @@ import {
 	GetWebSettingResponse,
 	MessageResponse,
 	Notice,
+	UserInfo,
 } from './interface';
 
 export const GetTodayMessage = (): Promise<MessageResponse> => {
@@ -25,4 +26,8 @@ export const GetLastNotice = (): Promise<CommonResponse<Notice>> => {
 
 export const GetAllNotice = (): Promise<CommonResponse<Notice[]>> => {
 	return get(`/getNoticeList`);
+};
+
+export const GetPersonalInfo = (): Promise<CommonResponse<UserInfo>> => {
+	return get('/getPersonalInfo');
 };

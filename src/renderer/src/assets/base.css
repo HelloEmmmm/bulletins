@@ -2,6 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+	@keyframes gradient-animation {
+		0% {
+			background-position: 0 50%;
+		}
+		10% {
+			background-position: -10% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		90% {
+			background-position: -10% 50%;
+		}
+		100% {
+			background-position: 0 50%;
+		}
+	}
+
+	.linearGradient {
+		background: radial-gradient(circle, #009dff 11.46%, #6d38fb 51.04%, #ff5353 88.24%);
+		background-size: 210% 150%;
+		animation: gradient-animation 8s ease infinite;
+		background-clip: text;
+		color: transparent;
+		/* 只在pc不允许换行 移动端默认允许换行 */
+		@media (min-width: 1024px) {
+			white-space: nowrap;
+		}
+	}
+	.linearGradientForMath {
+		background: radial-gradient(circle, #256af2 1.67%, #14a9ff 98.38%);
+		background-size: 210% 150%;
+		animation: gradient-animation 8s ease infinite;
+		background-clip: text;
+		color: transparent;
+		@media (min-width: 1024px) {
+			white-space: nowrap;
+		}
+	}
+
+	.linearGradientChinese {
+		background: radial-gradient(circle, #ff1d43 0.06%, #ff3a3a 45.52%, #ff765a 91.03%);
+		background-size: 210% 150%;
+		animation: gradient-animation 8s ease infinite;
+		background-clip: text;
+		color: transparent;
+		@media (min-width: 1024px) {
+			white-space: nowrap;
+		}
+	}
+
+	.linearGradientForEnglish {
+		background: radial-gradient(circle, #8642f8 35.47%, #c740e8 98.37%);
+		background-size: 210% 150%;
+		animation: gradient-animation 8s ease infinite;
+		background-clip: text;
+		color: transparent;
+		@media (min-width: 1024px) {
+			white-space: nowrap;
+		}
+	}
+}
+
 :root {
 	--ev-c-white: #ffffff;
 	--ev-c-white-soft: #f8f8f8;

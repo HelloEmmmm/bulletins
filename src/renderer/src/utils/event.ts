@@ -1,5 +1,5 @@
 interface ICallbackList {
-	[id: string]: () => void;
+	[id: string]: (...args: unknown[]) => void;
 }
 
 interface IEventObject {
@@ -32,7 +32,7 @@ class EventBus implements IEventBus {
 	}
 
 	// 发布事件
-	publish<T extends any[]>(eventName: string, ...args: T): void {
+	publish(eventName: string, ...args: unknown[]): void {
 		// 取出当前事件所有的回调函数
 		const callbackObject = this._eventObject[eventName];
 
@@ -41,13 +41,34 @@ class EventBus implements IEventBus {
 		// 执行每一个回调函数
 		for (const id in callbackObject) {
 			// 执行时传入参数
-			callbackObject[id].apply(null, ...args);
+			callbackObject[id](...args);
 
 			// 只订阅一次的回调函数需要删除
 			if (id[0] === 'd') {
 				delete callbackObject[id];
 			}
 		}
+	}
+
+	commonSubscribe(eventName: string, callback: () => void) {
+		// 标示为只订阅一次的回调函数
+		const id = 'd' + this._callbackId++;
+		// 存储订阅者的回调函数
+		// callbackId使用后需要自增，供下一个回调函数使用
+		this._eventObject[eventName][id] = callback;
+
+		// 每一次订阅事件，都生成唯一一个取消订阅的函数
+		const unSubscribe = () => {
+			// 清除这个订阅者的回调函数
+			delete this._eventObject[eventName][id];
+
+			// 如果这个事件没有订阅者了，也把整个事件对象清除
+			if (Object.keys(this._eventObject[eventName]).length === 0) {
+				delete this._eventObject[eventName];
+			}
+		};
+
+		return { unSubscribe };
 	}
 
 	// 订阅事件
@@ -57,25 +78,7 @@ class EventBus implements IEventBus {
 			// 使用对象存储，注销回调函数的时候提高删除的效率
 			this._eventObject[eventName] = {};
 		}
-
-		const id = this._callbackId++;
-
-		// 存储订阅者的回调函数
-		// callbackId使用后需要自增，供下一个回调函数使用
-		this._eventObject[eventName][id] = callback;
-
-		// 每一次订阅事件，都生成唯一一个取消订阅的函数
-		const unSubscribe = () => {
-			// 清除这个订阅者的回调函数
-			delete this._eventObject[eventName][id];
-
-			// 如果这个事件没有订阅者了，也把整个事件对象清除
-			if (Object.keys(this._eventObject[eventName]).length === 0) {
-				delete this._eventObject[eventName];
-			}
-		};
-
-		return { unSubscribe };
+		return this.commonSubscribe(eventName, callback);
 	}
 
 	// 只订阅一次
@@ -85,26 +88,7 @@ class EventBus implements IEventBus {
 			// 使用对象存储，注销回调函数的时候提高删除的效率
 			this._eventObject[eventName] = {};
 		}
-
-		// 标示为只订阅一次的回调函数
-		const id = 'd' + this._callbackId++;
-
-		// 存储订阅者的回调函数
-		// callbackId使用后需要自增，供下一个回调函数使用
-		this._eventObject[eventName][id] = callback;
-
-		// 每一次订阅事件，都生成唯一一个取消订阅的函数
-		const unSubscribe = () => {
-			// 清除这个订阅者的回调函数
-			delete this._eventObject[eventName][id];
-
-			// 如果这个事件没有订阅者了，也把整个事件对象清除
-			if (Object.keys(this._eventObject[eventName]).length === 0) {
-				delete this._eventObject[eventName];
-			}
-		};
-
-		return { unSubscribe };
+		return this.commonSubscribe(eventName, callback);
 	}
 
 	// 清除事件

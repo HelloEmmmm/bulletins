@@ -41,3 +41,19 @@ export interface CommonResponse<T> {
 	code: number;
 	data: T;
 }
+
+export interface UserInfo {
+	client_id: string;
+	created_at: string;
+	date_type: number;
+	expiration_date: string;
+	id: number;
+	invitation_code: string;
+	is_trial: number;
+	last_login_at: string;
+	password: string;
+	phone_number: string;
+	status: number;
+	type: number;
+	username: string;
+}
