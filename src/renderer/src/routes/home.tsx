@@ -76,10 +76,10 @@ const Home = (): ReactNode => {
 	}, [memorizedGetTodayMessage]);
 
 	return (
-		<div className='flex min-h-screen text-white'>
+		<div className='flex min-h-screen'>
 			<div className={'w-[40%] border-r-[1px] border-gray-600 p-[16px]'}>
 				<p className={'text-[20px] mb-[10px] font-bold'}>历史消息</p>
-				<ul className={'overflow-auto h-[calc(100vh-74px)]'}>
+				<ul className={'overflow-auto h-[calc(100vh-74px)] text-white'}>
 					{history.map((item) => {
 						return (
 							<li className={'flex justify-between'} key={item.id}>
@@ -109,7 +109,7 @@ const Home = (): ReactNode => {
 						联系作者
 					</button>
 					{userInfo && (
-						<div className={'flex gap-4'}>
+						<div className={'flex gap-4 text-white'}>
 							<p>过期时间：{userInfo?.expiration_date}</p>
 							<p
 								className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold`}
@@ -123,16 +123,18 @@ const Home = (): ReactNode => {
 				<div className={'flex-1 h-[calc(100vh-89px)] overflow-hidden'}>
 					<div className={'h-[30%] border-gray-600 border-b-[1px] p-[20px]'}>
 						<div className={'flex justify-between items-center cursor-pointer'}>
-							<p className={'text-[20px] mb-[10px] font-bold text-green-600'}>最新公告</p>
-							<p onClick={() => setAllNoticeOpen(true)}>更多</p>
+							<p className={'text-[20px] mb-[10px] font-[900]'}>最新公告</p>
+							<p onClick={() => setAllNoticeOpen(true)} className={'text-white'}>
+								更多
+							</p>
 						</div>
-						<div className={'overflow-auto h-[calc(100%-40px)]'}>
+						<div className={'overflow-auto h-[calc(100%-40px)] text-white'}>
 							<p className={'text-[18px]'}>{lastNotice?.message}</p>
 							<p className={'text-right'}>{lastNotice?.created_at}</p>
 						</div>
 					</div>
 					<div className={'h-[70%] p-[20px]'}>
-						<p className={'text-[20px] mb-[10px] font-bold text-green-600'}>今日消息</p>
+						<p className={'text-[20px] mb-[10px] font-[900]'}>今日消息</p>
 						<ul className={'overflow-auto h-[calc(100%-40px)]'}>
 							{today.map((item, index) => {
 								return (
