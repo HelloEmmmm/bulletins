@@ -2,11 +2,6 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
-// import Store from 'electron-store';
-
-// const store = new Store();
-
-// const token = store.get('token');
 
 function createWindow(): void {
 	// Create the browser window.
