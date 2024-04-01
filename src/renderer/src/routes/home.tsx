@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLoading } from '../hooks/useLoading';
 import {
 	GetAllMessage,
@@ -17,6 +17,8 @@ import {
 } from '../service/api/home/interface';
 import { eventBus } from '../utils/event';
 import AllNoticeModal from '../components/AllNoticeModal';
+import { Popover, Transition } from '@headlessui/react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = (): ReactNode => {
 	const { updateShow } = useLoading();
@@ -27,6 +29,8 @@ const Home = (): ReactNode => {
 	const [today, setToday] = useState<MessageResponse['data']>([]);
 	const [lastNotice, setLastNotice] = useState<Notice | null>(null);
 	const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+	const nav = useNavigate();
 
 	useEffect(() => {
 		GetAllMessage().then((res) => {
@@ -104,20 +108,53 @@ const Home = (): ReactNode => {
 							});
 						}}
 						type='button'
-						className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
+						className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
 					>
 						联系作者
 					</button>
+					<p
+						className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold text-right`}
+					>
+						{userInfo?.is_trial === 1 ? '试用账号' : '正式账号'}
+					</p>
+					<p className={'text-right'}>过期时间：{userInfo?.expiration_date}</p>
 					{userInfo && (
-						<div className={'flex gap-4 text-white'}>
-							<p>过期时间：{userInfo?.expiration_date}</p>
-							<p
-								className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold`}
-							>
-								{userInfo?.is_trial === 1 ? '试用账号' : '正式账号'}
-							</p>
-							<p>{userInfo?.username}</p>
-						</div>
+						<Popover className='relative'>
+							{({ open }) => (
+								<>
+									<Popover.Button
+										className={`
+                ${open ? 'text-white' : 'text-white/90'}
+                group inline-flex items-center rounded-md px-3 py-2 text-base font-medium hover:text-white focus:outline-none focus-visible:outline-none`}
+									>
+										<span>{userInfo.username}</span>
+									</Popover.Button>
+									<Transition
+										as={Fragment}
+										enter='transition ease-out duration-200'
+										enterFrom='opacity-0 translate-y-1'
+										enterTo='opacity-100 translate-y-0'
+										leave='transition ease-in duration-150'
+										leaveFrom='opacity-100 translate-y-0'
+										leaveTo='opacity-0 translate-y-1'
+									>
+										<Popover.Panel className='text-[12px] w-auto absolute right-0 rounded-[4px] p-[12px] bg-white z-10 mt-3 transform'>
+											<div className={'gap-2 flex flex-col'}>
+												<p
+													onClick={() => {
+														localStorage.setItem('token', '');
+														nav('/login');
+													}}
+													className={'text-right cursor-pointer whitespace-nowrap'}
+												>
+													退出登录
+												</p>
+											</div>
+										</Popover.Panel>
+									</Transition>
+								</>
+							)}
+						</Popover>
 					)}
 				</div>
 				<div className={'flex-1 h-[calc(100vh-89px)] overflow-hidden'}>
