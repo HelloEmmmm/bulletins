@@ -95,7 +95,7 @@ const Home = (): ReactNode => {
 		<div className='flex min-h-screen'>
 			<div className={'w-[40%] border-r-[1px] border-gray-600 p-[16px]'}>
 				<p className={'text-[20px] mb-[10px] font-bold'}>历史消息</p>
-				<ul className={'overflow-auto h-[calc(100vh-74px)] text-white'}>
+				<ul className={'overflow-auto h-[calc(100vh-74px)] text-white scrollbar-container'}>
 					{history.map((item) => {
 						return (
 							<li className={'flex justify-between'} key={item.id}>
@@ -123,6 +123,15 @@ const Home = (): ReactNode => {
 						className='text-white bg-red-900 hover:bg-red-800  font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none'
 					>
 						联系作者
+					</button>
+					<button
+						onClick={() => {
+							nav(0);
+						}}
+						type='button'
+						className='text-white bg-red-900 hover:bg-red-800  font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none'
+					>
+						刷新
 					</button>
 					<p
 						className={`${userInfo?.is_trial === 1 ? 'text-gray-300' : 'linearGradient'} font-bold text-right`}
@@ -184,7 +193,7 @@ const Home = (): ReactNode => {
 					</div>
 					<div className={'h-[70%] p-[20px]'}>
 						<p className={'text-[20px] mb-[10px] font-[900]'}>今日消息</p>
-						<ul className={'overflow-auto h-[calc(100%-40px)]'}>
+						<ul className={'overflow-auto h-[calc(100%-40px)] text-white scrollbar-container'}>
 							{today.map((item, index) => {
 								return (
 									<li className={'flex justify-between'} key={index}>

@@ -64,6 +64,32 @@
 			white-space: nowrap;
 		}
 	}
+
+	/* 滚动条容器的样式 */
+	.scrollbar-container {
+		overflow-y: scroll; /* 添加纵向滚动条 */
+		padding-right: 6px;
+	}
+
+	.scrollbar-container::-webkit-scrollbar {
+		width: 4px;
+	}
+
+	/* 定义滚动条轨道的样式 */
+	.scrollbar-container::-webkit-scrollbar-track {
+		background-color: transparent; /* 设置轨道背景为透明 */
+	}
+
+	/* 定义滚动条滑块的样式 */
+	.scrollbar-container::-webkit-scrollbar-thumb {
+		background-color: rgba(207, 207, 207, 0.5); /* 设置滑块颜色 */
+		border-radius: 2px; /* 设置滑块圆角 */
+	}
+
+	/* 鼠标悬浮在滚动条上的样式 */
+	.scrollbar-container::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(207, 207, 207, 0.8); /* 设置滑块悬浮时的颜色 */
+	}
 }
 
 :root {
