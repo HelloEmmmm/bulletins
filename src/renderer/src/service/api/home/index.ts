@@ -7,6 +7,7 @@ import {
 	Notice,
 	UserInfo,
 } from './interface';
+import { post } from '../../fetch';
 
 export const GetTodayMessage = (): Promise<MessageResponse> => {
 	return get(`/getTodayData`);
@@ -30,4 +31,8 @@ export const GetAllNotice = (): Promise<CommonResponse<Notice[]>> => {
 
 export const GetPersonalInfo = (): Promise<CommonResponse<UserInfo>> => {
 	return get('/getPersonalInfo');
+};
+
+export const Grouping = (data: { client_id: string }): Promise<CommonResponse<UserInfo>> => {
+	return post('/updateGroupUser', data);
 };

@@ -6,6 +6,7 @@ import {
 	GetPersonalInfo,
 	GetTodayMessage,
 	GetWebSetting,
+	Grouping,
 } from '../service/api/home';
 import Modal from '../components/Modal';
 import {
@@ -19,6 +20,7 @@ import { eventBus } from '../utils/event';
 import AllNoticeModal from '../components/AllNoticeModal';
 import { Popover, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Home = (): ReactNode => {
 	const { updateShow } = useLoading();
@@ -70,14 +72,24 @@ const Home = (): ReactNode => {
 		});
 	}, []);
 
+	const memorizedInvokeGroupingApi = useCallback((data) => {
+		Grouping({ client_id: data.client_id }).then((res) => {
+			if (res.code === 200) {
+				toast.success('链接成功');
+			}
+		});
+	}, []);
+
 	useEffect(() => {
 		eventBus.subscribe('GET_TODAY_MESSAGE', memorizedGetTodayMessage);
 		eventBus.subscribe('GET_NEW_NOTICE', memorizedGetLastNotice);
+		eventBus.subscribe('INVOKE_GROUP_API', memorizedInvokeGroupingApi);
 		return () => {
 			eventBus.clear('GET_TODAY_MESSAGE');
 			eventBus.clear('GET_NEW_NOTICE');
+			eventBus.clear('INVOKE_GROUP_API');
 		};
-	}, [memorizedGetTodayMessage]);
+	}, [memorizedGetTodayMessage, memorizedGetLastNotice, memorizedInvokeGroupingApi]);
 
 	return (
 		<div className='flex min-h-screen'>
@@ -108,7 +120,7 @@ const Home = (): ReactNode => {
 							});
 						}}
 						type='button'
-						className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
+						className='text-white bg-red-900 hover:bg-red-800  font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none'
 					>
 						联系作者
 					</button>

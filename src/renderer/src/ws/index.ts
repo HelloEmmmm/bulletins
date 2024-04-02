@@ -1,12 +1,13 @@
 import { eventBus } from '../utils/event';
 
-const ModeCode = {
+const MessageType = {
 	//websocket消息类型
 	MSG: 'message', //普通消息
 	HEART_BEAT: 'heart_beat', //心跳
 	PING: 'ping',
 	TODAY_MESSAGE: '1',
 	ANNOUNCEMENT: '2',
+	GROUPING: 200,
 };
 
 export default class MyWebSocket extends WebSocket {
@@ -60,23 +61,26 @@ export default class MyWebSocket extends WebSocket {
 		const data = this.getMsg(e);
 		console.log(data);
 		switch (data.type) {
-			case ModeCode.MSG: //普通消息
+			case MessageType.MSG: //普通消息
 				console.log('收到消息' + data.type);
 				break;
 			/* useless code */
-			case ModeCode.HEART_BEAT: //心跳
+			case MessageType.HEART_BEAT: //心跳
 				this.webSocketState = true;
 				console.log('收到心跳响应' + data.type);
 				break;
-			case ModeCode.PING: //心跳
+			case MessageType.PING: //心跳
 				this.webSocketState = true;
 				console.log('收到心跳响应' + data.type);
 				break;
-			case 1:
+			case MessageType.TODAY_MESSAGE:
 				eventBus.publish('GET_TODAY_MESSAGE');
 				break;
-			case 2:
+			case MessageType.ANNOUNCEMENT:
 				eventBus.publish('GET_NEW_NOTICE');
+				break;
+			case MessageType.GROUPING:
+				eventBus.publish('INVOKE_GROUP_API', data);
 				break;
 		}
 	};
@@ -94,11 +98,11 @@ export default class MyWebSocket extends WebSocket {
 		console.log('出错');
 	}
 
-	sendMsg(obj) {
+	sendMsg(obj: object) {
 		this.send(JSON.stringify(obj));
 	}
 
-	getMsg(e) {
+	getMsg(e: MessageEvent<any>) {
 		return JSON.parse(e.data);
 	}
 
@@ -106,14 +110,18 @@ export default class MyWebSocket extends WebSocket {
 	 * 心跳初始函数
 	 * @param time：心跳时间间隔
 	 */
-	startHeartBeat(time) {
-		this.heartTimer = window.setTimeout(() => {
-			this.sendMsg({
-				ModeCode: ModeCode.HEART_BEAT,
-				msg: new Date(),
-			});
-			this.waitingTimer = this.waitingServer();
-		}, time);
+	startHeartBeat(time: number | undefined) {
+		if (time) {
+			this.heartTimer = window.setTimeout(() => {
+				this.sendMsg({
+					ModeCode: MessageType.HEART_BEAT,
+					msg: new Date(),
+				});
+				this.waitingTimer = this.waitingServer();
+			}, time);
+		} else {
+			throw new Error('Missing parameter time');
+		}
 	}
 
 	//延时等待服务端响应，通过webSocketState判断是否连线成功

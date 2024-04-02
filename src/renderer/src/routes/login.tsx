@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useState } from 'react';
 import { LoginInput } from '../components/LoginInput';
 import { CreateUser, LoginApi } from '../service/api/login';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type PageType = 'login' | 'register';
@@ -54,6 +54,7 @@ const Login = (): ReactNode => {
 						onChange={memorizedHandleAccountChange}
 					/>
 					<LoginInput
+						type={'password'}
 						label={'密码'}
 						maxLength={16}
 						value={password}
@@ -96,6 +97,14 @@ const Login = (): ReactNode => {
 										}).then((res) => {
 											if (res.code === 200) {
 												toast.success(res.msg);
+												LoginApi({ ...base }).then((res) => {
+													if (res.code === 200) {
+														localStorage.setItem('token', res.token);
+														nav('/home');
+													} else {
+														toast.error(res.msg);
+													}
+												});
 											} else {
 												toast.error(res.msg);
 											}
@@ -124,7 +133,6 @@ const Login = (): ReactNode => {
 					&copy;2024 Riches Corp. All rights reserved.
 				</p>
 			</div>
-			<ToastContainer />
 		</div>
 	);
 };

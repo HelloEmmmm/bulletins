@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
 import MyWebSocket from '../ws';
+import { ToastContainer } from 'react-toastify';
 
 const Root = (): ReactNode => {
 	const _ipcHandle = (): void => window.electron.ipcRenderer.send('ping');
@@ -42,6 +43,7 @@ const Root = (): ReactNode => {
 		<>
 			{show && <Loading />}
 			<Outlet />
+			<ToastContainer />
 		</>
 	);
 };

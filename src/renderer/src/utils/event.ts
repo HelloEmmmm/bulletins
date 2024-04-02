@@ -13,7 +13,7 @@ interface ISubscribe {
 interface IEventBus {
 	publish<T extends any[]>(eventName: string, ...args: T): void;
 
-	subscribe(eventName: string, callback: () => void): ISubscribe;
+	subscribe(eventName: string, callback: (data?: any) => void): ISubscribe;
 
 	subscribeOnce(eventName: string, callback: () => void): ISubscribe;
 
@@ -71,7 +71,7 @@ class EventBus implements IEventBus {
 	}
 
 	// 订阅事件
-	subscribe(eventName: string, callback: () => void): ISubscribe {
+	subscribe(eventName: string, callback: (data?: any) => void): ISubscribe {
 		const id = this._callbackId++;
 		// 初始化这个事件
 		if (!this._eventObject[eventName]) {
