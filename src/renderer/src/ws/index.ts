@@ -5,8 +5,8 @@ const MessageType = {
 	MSG: 'message', //普通消息
 	HEART_BEAT: 'heart_beat', //心跳
 	PING: 'ping',
-	TODAY_MESSAGE: '1',
-	ANNOUNCEMENT: '2',
+	TODAY_MESSAGE: 1,
+	ANNOUNCEMENT: 2,
 	GROUPING: 200,
 };
 
