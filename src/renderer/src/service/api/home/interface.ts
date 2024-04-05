@@ -53,7 +53,6 @@ export interface UserInfo {
 	last_login_at: string;
 	password: string;
 	phone_number: string;
-	status: number;
 	type: number;
 	username: string;
 }

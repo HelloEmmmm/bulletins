@@ -72,7 +72,7 @@ const Home = (): ReactNode => {
 		});
 	}, []);
 
-	const memorizedInvokeGroupingApi = useCallback((data) => {
+	const memorizedInvokeGroupingApi = useCallback((data: { client_id: string }) => {
 		Grouping({ client_id: data.client_id }).then((res) => {
 			if (res.code === 200) {
 				toast.success('链接成功');

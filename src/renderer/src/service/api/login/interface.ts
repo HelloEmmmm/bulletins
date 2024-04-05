@@ -1,5 +1,4 @@
 export interface CreateUserApiParams extends LoginApiParams {
-	invitation_code: string;
 	phone_number: string;
 }
 

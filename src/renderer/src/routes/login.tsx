@@ -12,7 +12,6 @@ const Login = (): ReactNode => {
 	const [phone, setPhone] = useState<string>('');
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
-	const [invitationCode, setInvitationCode] = useState<string>('');
 	const nav = useNavigate();
 
 	const memorizedHandlePhoneChange = useCallback(
@@ -32,13 +31,6 @@ const Login = (): ReactNode => {
 	const memorizedHandlePasswordChange = useCallback(
 		(event: { target: { value: string | ((prevState: string) => string) } }) => {
 			setPassword(event.target.value);
-		},
-		[]
-	);
-
-	const memorizedHandleInvitationCodeChange = useCallback(
-		(event: { target: { value: string | ((prevState: string) => string) } }) => {
-			setInvitationCode(event.target.value);
 		},
 		[]
 	);
@@ -63,14 +55,7 @@ const Login = (): ReactNode => {
 					{pageType === 'register' && (
 						<LoginInput label={'手机号'} value={phone} onChange={memorizedHandlePhoneChange} />
 					)}
-					{pageType === 'register' && (
-						<LoginInput
-							value={invitationCode}
-							onChange={memorizedHandleInvitationCodeChange}
-							label={'邀请码'}
-						/>
-					)}
-					<div className='flex items-center justify-between mt-6'>
+					<div className={`flex items-center justify-between mt-6`}>
 						<button
 							onClick={() => {
 								const base = {
@@ -89,11 +74,10 @@ const Login = (): ReactNode => {
 										});
 									}
 								} else {
-									if (phone && username && password && invitationCode) {
+									if (phone && username && password) {
 										CreateUser({
 											...base,
 											phone_number: phone,
-											invitation_code: invitationCode,
 										}).then((res) => {
 											if (res.code === 200) {
 												toast.success(res.msg);
@@ -117,16 +101,14 @@ const Login = (): ReactNode => {
 						>
 							{pageType === 'login' ? '登录' : '注册'}
 						</button>
-						{pageType === 'login' && (
-							<a
-								onClick={() => {
-									setPageType(pageType === 'login' ? 'register' : 'login');
-								}}
-								className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
-							>
-								还没有账号？
-							</a>
-						)}
+						<a
+							onClick={() => {
+								setPageType(pageType === 'login' ? 'register' : 'login');
+							}}
+							className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
+						>
+							{pageType === 'login' ? '注册账号' : '返回登录'}
+						</a>
 					</div>
 				</form>
 				<p className='text-center text-gray-500 text-xs'>
